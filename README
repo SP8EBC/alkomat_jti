@@ -1,0 +1,26 @@
+W tym repozytorium siedzi cały kod źródłowy odpowiadający temu co jest wgrane na płytke + projekt do Eclipse Neon.1 (4.6.1). Jak się sklonuje to repo to wystarczy zaimportować projekt do Eclipse i wszystko powinno banglać. Do kompilacji potrzebny jest GNU ARM Embedded Toolchain, informację jego tematm źródła, skompilowane wersję dystrybucyjne i dokumentację znajdują się tutaj:
+
+https://launchpad.net/gcc-arm-embedded
+https://developer.arm.com/open-source/gnu-toolchain/gnu-rm
+Instrukcja konfiguracji repo i instalacji pakietu znajduje się tutaj.
+https://launchpad.net/~team-gcc-arm-embedded/+archive/ubuntu/ppa 
+
+Całość była robiona i składana pod Linuxem Xubuntu 16.04 ale pod wingrozą też się da jak się ogarnie instalaję kompilatorów, debuggera i wszystkiego co potrzebne. Sam sposób instalacji toolchaina pod linuksem można sobie podglądnąć tutaj, w dokumentacji mojego innego projektu: https://github.com/SP8EBC/para-tnc/blob/master/README-pl
+
+
+Sama płytka jest zasilana z USB i po podłączeniu do ładowarki albo PC popwinna sama wstać. Można też podać zasilanie pomiędzdy pin GND i +5V, ale nie wolno podawać naraz z jednej i z drugiej strony. Sygnał analogowy z czujnika alko powinien być podłączony do PA2, zasilanie +5V. Termometr DS12B20 powinien być podłączony tak żeby
+czarny przewód był na masie a czerwony na +5V, a żółty (OneWire) powinien wypadać na PD2
+
+Wyjście z urządzenia jest na pinach PC8 i PC9 do których są też podłączone diody LED na płytce. Jak poziom skalibrowanego i uśrednionego sygnału z alko czujnika będzie większy niż poziom graniczny to PC8 będzie miało niski stan logiczny a PC9 wysoki stan logiczny. Jak poziom sygnału będzie mniejszy niż graniczny to vice versa, PC8
+będzie miało wysoki a PC9 niski.
+
+Poziom graniczny można sobie zmieniać skokowo. Normalnie jest on zadardy bardzo wysoko, na około 73%. Jeżeli jednak zewrze się przy starcie odpowiednie piny do masy,
+to ten poziom się zmniejszy. Program zatrzaskuje tą wartość przy starcie dlatego potem przekładanie tej zworki nic nie zmienia.
+
+PA3 do masy - 40%
+PA4 do masy - 48%
+PA5 do masy - 53%
+PA6 do masy - 63%
+PA7 do masy - 68%
+
+To sa procenty w znaczeniu skali przetwornika ADC, sam czujnik alko jest oczwiście nieliniowy i różnice pomiędzy poziomami mogę nie być takie same. Płytka będzie chodziła bez podłączonego termometru ale oczywiście pomiary będą dużo bardziej zmieniały się z temperaturą. Płytka uśrednia sobie te pomiary także sygnał wyjściowy można uznać za ważny dopiero po około 5~7 sekundach od włączenia jak się ustabilizuje uśredniacz. Wpływa to oczywiście też na czas rekacji na alkohol ale bez tego to w ogóle by cuda na kiju pokazywało. 
